@@ -28,9 +28,10 @@ public class HexRenderer : MonoBehaviour
 
   public List<Face> m_faces;
 
-  public float height = 1.17f;
-  public float outerSize = 1f;
-  public float innerSize = 0.2f;
+  public float height;
+  public float outerSize;
+  public float innerSize;
+  public bool isFlatTopped;
 
   public Material material;
 
@@ -60,6 +61,11 @@ public class HexRenderer : MonoBehaviour
     }
   }
 
+  public void SetMaterial(Material addMaterial)
+  {
+    material = addMaterial;
+  }
+
   public void DrawMesh()
   {
     DrawFaces();
@@ -74,6 +80,22 @@ public class HexRenderer : MonoBehaviour
     {
       m_faces.Add(CreateFace(innerSize, outerSize,height/2f,height/2f,point));
     }
+
+    for (int point=0;point<6;point++)
+    {
+      m_faces.Add(CreateFace(innerSize, outerSize,-height/2f,-height/2f,point,true));
+    }
+
+    for (int point=0;point<6;point++)
+    {
+      m_faces.Add(CreateFace(outerSize, outerSize,height/2f,-height/2f,point,true));
+    }
+    
+    for (int point=0;point<6;point++)
+    {
+      m_faces.Add(CreateFace(innerSize, innerSize,height/2f,-height/2f,point,false));
+    }
+    
   }
 
   private void CombineFaces()
@@ -114,12 +136,12 @@ public class HexRenderer : MonoBehaviour
     {
       vertices.Reverse();
     }
-    return new Face();
+    return new Face(vertices,triangles,uvs);
   }
   
   protected Vector3 GetPoint(float size, float height, int index)
   {
-    float angle_deg = 60 * index;
+    float angle_deg = isFlatTopped ? 60* index: 60*index-30;
     float angle_rad = Mathf.PI/180f * angle_deg;
     return new Vector3((size * Mathf.Cos(angle_rad)), height, size*Mathf.Sin(angle_rad));
   }
