@@ -17,6 +17,21 @@ public struct Face
   }
 }
 
+// [CreateAssetMenu(menuName="TileGen/GenerationSetting")]
+// public class HexTileGenerationSettings : ScriptableObject
+// {
+//   public enum TileType
+//   {
+//     Standard,
+//     Water,
+//     Cliff
+//   }
+//   public GameObject Standard;
+//   public GameObject Water;
+//   public GameObject Cliff;
+
+// }
+
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 public class HexRenderer : MonoBehaviour
@@ -34,6 +49,11 @@ public class HexRenderer : MonoBehaviour
   public bool isFlatTopped;
 
   public Material material;
+
+  public Vector2Int offsetCoordinate;
+  public Vector3Int cubeCoordinate;
+  public List<HexRenderer> neighbours;
+
 
  
   private void Awake()
