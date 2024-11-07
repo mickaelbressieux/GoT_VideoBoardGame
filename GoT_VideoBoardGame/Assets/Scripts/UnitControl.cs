@@ -40,52 +40,54 @@ public class UnitControl : MonoBehaviour
         // Check if the player has clicked the left mouse button
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Mouse button clicked");
             // Create a ray from the camera to the mouse cursor
             Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             // Check if the ray hits any object
-            if (Physics.Raycast(ray, out hit))
+            if (isPositioningUnit) // Phase 1: Fielding Units
+            {
+                if (Physics.Raycast(ray, out hit))
+                {
+                    PositionUnit(hit);
+                    
+                }
+            }
+            else if (Physics.Raycast(ray, out hit)) // Phase 2: Selecting Units for repositioning and orientation
             {
                 SelectUnit(hit);
             }
             else
             {
                 // Deselect all units if the player clicks on an empty space
-                Debug.Log("Empty space clicked");
                 selectedUnits.ForEach(unit => unit.DeselectUnit());
             }
         }
 
-        if (isPositioningUnit)
+        
+    }
+
+    private void PositionUnit(RaycastHit hit)
+    {
+        // Position the unit from the panel on the battlefield
+        if (hit.collider.CompareTag("Battleground")) // Check if the ray hits the terrain
         {
-            if (Input.GetMouseButtonDown(0)) // Check if the player has clicked the left mouse button
-            {
-                Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
+            //Instantiate the selected unit at the position of the mouse click
+            Debug.Log("Instantiating unit: " + selectedUnit + " at position: " + hit.point);
+            string unitType = selectedUnit.Substring(0, selectedUnit.Length - 1);
+            GameObject unit = Instantiate(Resources.Load(unitType), hit.point, Quaternion.identity) as GameObject;
+            
+            unit.name = selectedUnit;
 
-                Debug.Log("Mouse button clicked while positioning unit");
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.CompareTag("Battleground")) // Check if the ray hits the terrain
-                    {
-                        //Instantiate the selected unit at the position of the mouse click
-                        
-
-                        Debug.Log("Instantiating unit: " + selectedUnit + " at position: " + hit.point);
-
-                        GameObject unit = Instantiate(Resources.Load(selectedUnit), hit.point, Quaternion.identity) as GameObject;
-                        
-                    }
-                }
-            }
+            askRemoveUnit(selectedUnit);
+            selectedUnit = null;
+            isPositioningUnit = false;
         }
     }
 
     private void SelectUnit(RaycastHit hit)
     {
+        // Manage unit selection
         // Check if the object hit by the ray is a unit
         if (hit.collider.CompareTag("Unit"))
         {
@@ -115,7 +117,14 @@ public class UnitControl : MonoBehaviour
         else if (hit.collider.CompareTag("Battleground"))
         {
             Debug.Log("Battleground clicked");
+            selectedUnits.ForEach(unit => unit.DeselectUnit());
         }
+    }
+    private void askRemoveUnit(string unitName)
+    {
+        Debug.Log("Removing unit from panel: " + unitName);
+        // Use removeUnitFromPanel to remove the unit from the panel
+        GameObject.Find("HUD").GetComponent<HUDController>().RemoveUnitFromPanel(unitName);
     }
 }
 

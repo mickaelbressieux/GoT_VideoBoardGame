@@ -104,11 +104,30 @@ public class HUDController : MonoBehaviour
         // send the selected unit to the UnitControl in player and set isPositioningUnit to true
         GameObject player = GameObject.Find("Player");
 
-        string unitType = unitName.Substring(0, unitName.Length - 1);
-        player.GetComponent<UnitControl>().selectedUnit = unitType;
+        
+        player.GetComponent<UnitControl>().selectedUnit = unitName;
         player.GetComponent<UnitControl>().isPositioningUnit = true;
 
 
 
     }
+
+    public void RemoveUnitFromPanel(string unitName)
+    {
+        //remove the unit from the panel when it is placed on the battlefield
+        
+        //Debug.Log("Removing unit: " + unitName);
+        
+        Transform unitInsignaTransform = unitsPanel.transform.Find(unitName);
+        if (unitInsignaTransform != null)
+        {
+            GameObject unitInsigna = unitInsignaTransform.gameObject;
+            Destroy(unitInsigna);
+        }
+        else
+        {
+            Debug.LogError("Unit insigna with name " + unitName + " not found within unitsPanel.");
+        }
+    }
 }
+        
