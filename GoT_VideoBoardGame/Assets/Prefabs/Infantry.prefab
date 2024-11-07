@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3393129938335674331}
   - component: {fileID: 8398077451622553339}
   m_Layer: 0
-  m_Name: Fantassins
+  m_Name: Infantry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

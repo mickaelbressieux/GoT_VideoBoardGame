@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CombatPhaseGameManager : MonoBehaviour
 {
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +18,8 @@ public class CombatPhaseGameManager : MonoBehaviour
         Debug.Log(gameManager);
         switchPhaseButton.onClick.AddListener(() => gameManager.GetComponent<GameManager>().SwitchToStrategyPhase());
 
+
+        
     }
 
     // Update is called once per frame

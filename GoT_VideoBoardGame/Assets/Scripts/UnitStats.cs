@@ -12,6 +12,21 @@ public class UnitStats : MonoBehaviour
     public int range = 1; // Attack range in squares
     public int morale = 100; // Morale in percentage
 
+    public bool isSelected = false;
+
+    public void SelectUnit()
+    {
+        // Change the color of the unit to indicate selection
+        GetComponent<Renderer>().material.color = Color.yellow;
+        isSelected = true;
+    }
+    public void DeselectUnit()
+    {
+        // Change the color of the unit to indicate deselection
+        GetComponent<Renderer>().material.color = Color.blue;
+        isSelected = false;
+    }
+
     // Defin rectangle width and length with respect to the remaining HP
     public float GetWidth()
     {
